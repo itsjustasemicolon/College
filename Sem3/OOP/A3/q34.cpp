@@ -1,53 +1,79 @@
-#include <iostream>
-#include <vector>
-#include <cmath>
-#include <memory>
-
+#include <bits/stdc++.h>
 using namespace std;
+
+
 class Shape {
 public:
-    virtual ~Shape() = default;
-    virtual void print()= 0;
+
+    virtual string getName() const = 0;
+    virtual double getArea() const = 0;
+
+
+    virtual ~Shape() {}
 };
 
 
 class TwoDShape : public Shape {
 public:
-    virtual double getArea() = 0;
+
+    virtual ~TwoDShape() {}
 };
 
 
 class ThreeDShape : public Shape {
 public:
-    virtual double surArea()=0;
-    virtual double getVolume() = 0;
+
+    virtual double getVolume() const = 0;
+    virtual ~ThreeDShape() {}
 };
 
 
 class Circle : public TwoDShape {
 private:
     double radius;
+
 public:
     Circle(double r) : radius(r) {}
-    double getArea()   {
-        return 3.14 * radius * radius;
+
+    string getName() const override {
+        return "Circle";
     }
-    void print()   {
-        cout << "Circle: Area = " << getArea() << endl;
+
+    double getArea() const override {
+        return M_PI * radius * radius;
     }
 };
 
 
-class Rectangle : public TwoDShape {
+class Triangle : public TwoDShape {
 private:
-    double width, height;
+    double base, height;
+
 public:
-    Rectangle(double w, double h) : width(w), height(h) {}
-    double getArea()   {
-        return width * height;
+    Triangle(double b, double h) : base(b), height(h) {}
+
+    string getName() const override {
+        return "Triangle";
     }
-    void print()   {
-        cout << "Rectangle: Area = " << getArea() << endl;
+
+    double getArea() const override {
+        return 0.5 * base * height;
+    }
+};
+
+class Ellipse : public TwoDShape {
+private:
+    double majorAxis, minorAxis;
+
+public:
+    Ellipse(double a, double b) : majorAxis(a), minorAxis(b) {}
+
+    string getName() const override {
+        return "Ellipse";
+    }
+
+    double getArea() const override {
+        return M_PI * majorAxis * minorAxis;
     }
 };
 
@@ -55,48 +81,68 @@ public:
 class Sphere : public ThreeDShape {
 private:
     double radius;
+
 public:
     Sphere(double r) : radius(r) {}
-    double surArea()   {
-        return 4 * 3.14 * radius * radius;
+
+    string getName() const override {
+        return "Sphere";
     }
-    double getVolume()   {
-        return (4.0 / 3) * 3.14 * radius * radius * radius;
+
+    double getArea() const override {
+        return 4 * M_PI * radius * radius;
     }
-    void print()   {
-        cout << "Sphere: Area = " << surArea() << ", Volume = " << getVolume() << endl;
+    
+    double getVolume() const override {
+        return (4.0 / 3) * M_PI * pow(radius, 3);
     }
 };
-
 
 class Cube : public ThreeDShape {
 private:
     double side;
+
 public:
     Cube(double s) : side(s) {}
-    double surArea()   {
+
+    string getName() const override {
+        return "Cube";
+    }
+
+    double getArea() const override {
         return 6 * side * side;
     }
-    double getVolume()   {
-        return side * side * side;
-    }
-    void print()   {
-        cout << "Cube: Area = " << surArea() << ", Volume = " << getVolume() << endl;
+
+    double getVolume() const override {
+        return pow(side, 3);
     }
 };
 
 int main() {
-    vector<unique_ptr<Shape>> shapes;
 
-    
-    shapes.push_back(make_unique<Circle>(5.0));
-    shapes.push_back(make_unique<Rectangle>(4.0, 6.0));
-    shapes.push_back(make_unique<Sphere>(3.0));
-    shapes.push_back(make_unique<Cube>(2.0));
+    vector<Shape*> shapes;
 
-    
-    for ( auto& shape : shapes) {
-        shape->print();
+    shapes.push_back(new Circle(3.0));
+    shapes.push_back(new Triangle(3.0, 4.0));
+    shapes.push_back(new Ellipse(5.0, 2.0));
+    shapes.push_back(new Sphere(4.0));
+    shapes.push_back(new Cube(2.0));
+
+    for (Shape* shape : shapes) {
+        cout << "Shape: " << shape->getName() << endl;
+        cout << "Area: " << shape->getArea() << endl;
+
+
+        ThreeDShape* threeDShape = dynamic_cast<ThreeDShape*>(shape);
+        if (threeDShape) {
+            cout << "Volume: " << threeDShape->getVolume() << endl;
+        }
+
+        cout << "--------------------------" << endl;
+    }
+
+    for (Shape* shape : shapes) {
+        delete shape;
     }
 
     return 0;
