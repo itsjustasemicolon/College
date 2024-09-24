@@ -1,50 +1,49 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
 
-typedef struct {
-    int coeff;
-    int exp;
-} Term;
+int main(){
+    int deg1,deg2;
+    printf("Enter the degree of the first and second polynomials respectively: ");
+    scanf("%d",&deg1);
+    scanf("%d",&deg2);
+    int i;
 
+    printf("Enter the polynomial 1: \n");
+    int pol1[deg1+1];
+    for(i=deg1;i>=0;i--){
+        printf("Coefficient of x^%d: ",i);
+        scanf("%d",&pol1[i]);
+    }
 
-Term* multiplySparsePolynomials(Term* poly1, int size1, Term* poly2, int size2, int* resSize) {
-    Term* res = (Term*) malloc((size1 * size2) * sizeof(Term));
-    int resInd = 0;
-
-    for (int i = 0; i < size1; i++) {
-        for (int j = 0; j < size2; j++) {
-            int coeff = poly1[i].coeff * poly2[j].coeff;
-            int exp = poly1[i].exp + poly2[j].exp;
-
-            
-            res[resInd].coeff = coeff;
-            res[resInd].exp = exp;
-            resInd++;
+    printf("\n Enter the polynomial 2: \n");
+    int pol2[deg2+1];
+    for(i=deg2;i>=0;i--){
+        printf("Coefficient of x^%d: ",i);
+        scanf("%d",&pol2[i]);
+    }
+    
+    int polres[(deg1+deg2+1)];
+    for(i=0;i<=deg1+deg2;i++)
+    polres[i]=0;
+    for(i=0;i<=deg1;i++)
+    {
+        for(int j=0;j<=deg2;j++)
+        {
+            polres[i+j]+=pol1[i]*pol2[j];
         }
     }
-
-    *resSize = resInd;
     
-
-    return res;
-}
-
-int main() {
-    
-    Term poly1[] = {{3, 5}, {2, 1}};
-    Term poly2[] = {{1, 3}, {4, 0}};
-    int size1 = sizeof(poly1) / sizeof(poly1[0]);
-    int size2 = sizeof(poly2) / sizeof(poly2[0]);
-
-    int resSize;
-    Term* res = multiplySparsePolynomials(poly1, size1, poly2, size2, &resSize);
-
-    
-    for (int i = 0; i < resSize; i++) {
-        printf("%dx^%d ", res[i].coeff, res[i].exp);
+    for(i=(deg1+deg2);i>=0;i--)
+    {
+        if(polres[i]==0){
+        continue;
+        }
+        if(i==0){
+        printf("%d",polres[i]);
+        continue;
+        }
+        printf("%d x^%d + ",polres[i],i);
     }
-    printf("\n");
-
-    free(res);
+    
     return 0;
 }
+
