@@ -2,7 +2,7 @@
 
 int main (){
   
-    int n, i;
+    int n, i,j;
 
     // Input the number of elements
     printf("Enter the number of elements: ");
@@ -18,9 +18,22 @@ int main (){
 
     // Reverse the array
     printf("Reversed array: \n");
-    for(i = n-1; i >= 0; i--) {
+    i=0;
+    j=n-1;
+    while(i<j)
+    {
+        int t=arr[i];
+        arr[i]=arr[j];
+        arr[j]=t;
+        i++;
+        j--;
+    }
+    
+    printf("Enter the elements: \n");
+    for(i = 0; i < n; i++) {
         printf("%d ", arr[i]);
     }
+        
 
     printf("\n");
     return 0;
