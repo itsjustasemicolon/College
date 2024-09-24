@@ -6,50 +6,14 @@ typedef struct Node {
     int data;
     struct Node* next;
 } Node;
-
-// Function to create a new node
-Node* createNode(int data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
-}
-
-// Function to create a circular linked list with n nodes
-Node* createCircularList(int n) {
-    if (n <= 0) return NULL;
-
-    Node* head = createNode(1);
-    Node* current = head;
-
-    for (int i = 2; i <= n; i++) {
-        current->next = createNode(i);
-        current = current->next;
-    }
-    current->next = head; // Make it circular
-    return head;
-}
-
 // Function to solve the Josephus problem
-int josephus(Node** head, int k) {
-    if (*head == NULL || k <= 0) return -1;
-
-    Node* current = *head;
-    Node* prev = NULL;
-
-    // Find the last node to adjust circular link
-    while (current->next != *head) {
-        current = current->next;
-    }
-
-    // Set the last node as the end of the list
-    prev = current;
-    current = *head;
-
+int josephus(Node* prev, int k,int n) {
+    Node* current=prev->next;//head
     // Eliminate nodes until one node is left
-    while (prev != current) {
-        // Count k-1 nodes
-        for (int i = 1; i < k; i++) {
+    while (n>1) 
+    {
+        for (int i = 1; i < k; i++) 
+        {
             prev = current;
             current = current->next;
         }
@@ -57,15 +21,13 @@ int josephus(Node** head, int k) {
         // Remove the k-th node
         prev->next = current->next;
         free(current);
-
         // Move to the next node
         current = prev->next;
+        n--;
     }
 
     int lastPerson = current->data;
     free(current); // Free the last remaining node
-    *head = NULL;  // Clear the list
-
     return lastPerson;
 }
 
@@ -89,13 +51,25 @@ int main() {
     scanf("%d", &n);
     printf("Enter the step count (k): ");
     scanf("%d", &k);
-
-    Node* head = createCircularList(n);
-   
+    if(n<=0)
+    return 0;
+    Node* head = (Node*) malloc(sizeof(Node));
+    head->data=1;
+    head->next=NULL;
+    Node *ptr=head;
+    for(int i=2;i<=n;i++)
+    {
+        Node* n = (Node*) malloc(sizeof(Node));
+        n->data=i;
+        n->next=NULL;
+        ptr->next=n;
+        ptr=n;
+    }
+    ptr->next=head;// Make it circular
     printf("Circular linked list before elimination: ");
     printCircularList(head);
 
-    int lastPerson = josephus(&head, k);
+    int lastPerson = josephus(ptr, k,n);
 
     printf("The last remaining person is: %d\n", lastPerson);
 
