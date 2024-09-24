@@ -20,36 +20,41 @@ int main(){
         printf("Coefficient of x^%d: ",i);
         scanf("%d",&pol2[i]);
     }
-
-    int ansdeg=(deg1>deg2)?deg1:deg2;
-    int ans[ansdeg];
-    if(deg1>deg2){
-        for(i=0;i<=deg2;i++){
-            ans[i]=pol1[i]+pol2[i];
+    if(deg1<=deg2)
+    {
+        for(i=0;i<=deg1;i++)
+        {
+            pol2[i]+=pol1[i];
         }
-        for(i=deg2+1;i<=deg1;i++){
-            ans[i]=pol1[i];
+        for(i=deg2;i>=0;i--)
+        {
+            if(pol2[i]==0){
+            continue;
+            }
+            if(i==0){
+            printf("%d",pol2[i]);
+            continue;
+            }
+            printf("%d x^%d + ",pol2[i],i);
         }
     }
-
-    if(deg1<=deg2){
-        for(i=0;i<=deg1;i++){
-            ans[i]=pol1[i]+pol2[i];
+    else
+    {
+        for(i=0;i<=deg2;i++)
+        {
+            pol1[i]+=pol2[i];
         }
-        for(i=deg1+1;i<=deg2;i++){
-            ans[i]=pol2[i];
-        }
-    }
-
-    for(i=ansdeg;i>=0;i--){
-        if(ans[i]==0){
+        for(i=deg1;i>=0;i--)
+        {
+            if(pol1[i]==0){
             continue;
-        }
-        if(i==0){
-            printf("%d",ans[i]);
+            }
+            if(i==0){
+            printf("%d",pol1[i]);
             continue;
+            }
+            printf("%d x^%d + ",pol1[i],i);
         }
-        printf("%d x^%d + ",ans[i],i);
     }
     return 0;
 }
