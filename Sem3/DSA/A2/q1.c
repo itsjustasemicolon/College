@@ -1,150 +1,163 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
-
-// Define the structure for a linked list node
-typedef struct Node {
-    int data;
-    struct Node* next;
-} Node;
-
-// Function to create a new node
-Node* createNode(int data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
+typedef struct node
+{
+    int n;
+    struct node* next;
+}node;
+node* head=NULL;
+void view(node*);
+void view(node* ptr)
+{
+    printf("head->");
+    while(ptr!=NULL)
+    {
+        printf("%i->",ptr->n);
+        ptr=ptr->next;
+    }
+    printf("NULL");
 }
+int main()
+{
+    int noNodes=0;
+    while(true)
+    {
+        printf("\na. Insert a node at a specified position \nb. View List \nc. Delete a node from a specified position. \nd. Count the number of nodes in the linked list. \ne. Reverse the linked list. \nf. Exit \nEnter choice: ");
+        char ch;
+        scanf(" %c",&ch);
+        switch(ch)
+        {
+            case 'a':
+            if(noNodes==0)
+            {
+                head=(node*)malloc(sizeof(node));
+                printf("n: ");
+                int no;
+                scanf("%i",&no);
+                head->n=no;
+                head->next=NULL;
+                noNodes++;
+            }
+            else
+            {
+                printf("Enter position: ");
+                int pos;
+                scanf("%i",&pos);
+                if(pos>0 && pos<=noNodes+1)
+                {
+                    node* ptr=(node*)malloc(sizeof(node));
+                    printf("n: ");
+                    int no;
+                    scanf("%i",&no);
+                    ptr->n=no;
+                    ptr->next=NULL;
+                    if(pos==1)
+                    {
+                        ptr->next=head;
+                        head=ptr;
+                    }
+                    else
+                    {
+                        int c=1;
+                        node* p=head;
+                        while(p!=NULL && c<pos-1)
+                        {
+                            p=p->next;
+                            c++;
+                        }
+                        ptr->next=p->next;
+                        p->next=ptr;
+                    }
+                    noNodes++;
+                }
+                
+                else{
+                    printf("Invalid position !");
+                }
 
-// Function to insert a node at a specified position
-void insertAtPosition(Node** head, int data, int position) {
-    Node* newNode = createNode(data);
-    if (position == 0) {
-        newNode->next = *head;
-        *head = newNode;
-        return;
+            }
+            break;
+
+            case 'b':
+            if(noNodes>0)
+            view(head);
+            else
+            printf("Emtpy list ! Invalid request");
+            break;
+
+            case 'c':
+            if(noNodes>0)
+            {
+                printf("Enter position: ");
+                int pos;
+                scanf("%i",&pos);
+                if(pos==1)
+                {
+                    node* p=head;
+                    head=p->next;
+                    free(p);
+                    noNodes--;
+                }
+                else if(pos>1 && pos<=noNodes)
+                {
+                    int c=1;
+                    node* p=head;
+                    while(p!=NULL && c<pos-1)
+                    {
+                        p=p->next;
+                        c++;
+                    }
+                    node* prev=p;
+                    p=p->next;
+                    prev->next=p->next;
+                    free(p);
+                    noNodes--;
+                }
+                else
+                printf("Invalid position");
+            }
+            else
+            printf("Emtpy list ! Invalid request");
+            break;
+
+            case 'd':
+            printf("Nodes in linked list: %i",noNodes);
+            break;
+
+            case 'e':
+            if(noNodes==0)
+            printf("Emtpy list ! Invalid request");
+            else if(noNodes==1)
+            break;
+            else
+            {
+                node* prev;
+                node* curr;
+                node* nxt;
+                prev=head;
+                curr=head->next;
+                nxt=curr->next;
+                prev->next=NULL;
+                while(nxt!=NULL)
+                {
+                    curr->next=NULL;
+                    curr->next=prev;
+                    prev=curr;
+                    curr=nxt;
+                    nxt=nxt->next;
+                }
+                curr->next=prev;
+                prev=curr;
+                head=prev;
+
+            }
+            break;
+
+            case 'f':
+            return 0;
+        }
+
     }
-
-    Node* current = *head;
-    for (int i = 0; current != NULL && i < position - 1; i++) {
-        current = current->next;
-    }
-
-    if (current == NULL) {
-        printf("Position out of range\n");
-        free(newNode);
-        return;
-    }
-
-    newNode->next = current->next;
-    current->next = newNode;
-}
-
-// Function to delete a node from a specified position
-void deleteAtPosition(Node** head, int position) {
-    if (*head == NULL) {
-        printf("List is empty\n");
-        return;
-    }
-
-    Node* temp = *head;
-
-    if (position == 0) {
-        *head = temp->next;
-        free(temp);
-        return;
-    }
-
-    Node* prev = NULL;
-    for (int i = 0; temp != NULL && i < position; i++) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    if (temp == NULL) {
-        printf("Position out of range\n");
-        return;
-    }
-
-    prev->next = temp->next;
-    free(temp);
-}
-
-// Function to count the number of nodes in the linked list
-int countNodes(Node* head) {
-    int count = 0;
-    Node* current = head;
-    while (current != NULL) {
-        count++;
-        current = current->next;
-    }
-    return count;
-}
-
-// Function to print the linked list in reverse order
-void reversePrint(Node* head) {
-    if (head == NULL) return;
-    reversePrint(head->next);
-    printf("%d -> ", head->data);
-}
-
-// Function to reverse the linked list
-void reverseList(Node** head) {
-    Node* prev = NULL;
-    Node* current = *head;
-    Node* next = NULL;
-
-    while (current != NULL) {
-        next = current->next;
-        current->next = prev;
-        prev = current;
-        current = next;
-    }
-    *head = prev;
-}
-
-// Function to print the linked list
-void printList(Node* head) {
-    Node* current = head;
-    while (current != NULL) {
-        printf("%d -> ", current->data);
-        current = current->next;
-    }
-    printf("NULL\n");
-}
-
-// Main function to test the linked list operations
-int main() {
-    Node* head = NULL;
-
-    // Insert nodes
-    insertAtPosition(&head, 10, 0);
-    insertAtPosition(&head, 20, 1);
-    insertAtPosition(&head, 30, 2);
-    insertAtPosition(&head, 25, 2);
-    printf("List after insertions: ");
-    printList(head);
-
-    // Count nodes
-    printf("Number of nodes: %d\n", countNodes(head));
-
-    // Reverse print the list
-    printf("Reverse print of the list: ");
-    reversePrint(head);
-    printf("NULL\n");
-
-    // Reverse the linked list
-    reverseList(&head);
-    printf("List after reversal: ");
-    printList(head);
-
-    // Delete nodes
-    deleteAtPosition(&head, 1);
-    printf("List after deletion at position 1: ");
-    printList(head);
-
-    deleteAtPosition(&head, 0);
-    printf("List after deletion at position 0: ");
-    printList(head);
-
     return 0;
 }
