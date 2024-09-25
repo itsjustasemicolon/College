@@ -1,75 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
 // Define the structure for a stack node
 typedef struct Node {
     int data;
     struct Node* next;
 } Node;
-
-// Function to create a new node
-Node* createNode(int data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->data = data;
-    newNode->next = NULL;
-    return newNode;
-}
-
+Node* head=NULL;
+int noNodes=0;
 // Function to push an element onto the stack
-void push(Node** top, int data) {
-    Node* newNode = createNode(data);
-    newNode->next = *top;
-    *top = newNode;
-    printf("Pushed %d onto the stack.\n", data);
+void push(int d) {
+    Node* newNode =(Node*) malloc(sizeof(Node));
+    newNode->data=d;
+    newNode->next =head;
+    head=newNode;
+    noNodes++;
 }
 
 // Function to pop an element from the stack
-int pop(Node** top) {
-    if (*top == NULL) {
-        printf("Stack is empty. Nothing to pop.\n");
-        return -1;
-    }
-   
-    Node* temp = *top;
-    int poppedValue = temp->data;
-    *top = (*top)->next;
-    free(temp);
-   
-    return poppedValue;
+int pop(Node* top) {
+    head=head->next;
+    top->next=NULL;
+    int v=top->data;
+    free(top);
+    noNodes--;
+    return v;
 }
-
-// Function to peek at the top element of the stack
-int peek(Node* top) {
-    if (top == NULL) {
-        printf("Stack is empty. Nothing to peek.\n");
-        return -1;
-    }
-    return top->data;
-}
-
-// Function to check if the stack is empty
-int isEmpty(Node* top) {
-    return top == NULL;
-}
-
 // Function to display all elements in the stack
 void display(Node* top) {
-    if (top == NULL) {
-        printf("Stack is empty.\n");
-        return;
-    }
-   
-    Node* current = top;
-    printf("Stack elements:\n");
-    while (current != NULL) {
-        printf("%d\n", current->data);
-        current = current->next;
+    while (top != NULL) {
+        printf("%d\n", top->data);
+        top = top->next;
     }
 }
 
-// Function to display the menu and handle user input
-void menu() {
-    Node* stack = NULL;
+
+int main() 
+{
     int choice, value;
    
     do {
@@ -82,53 +49,55 @@ void menu() {
         printf("6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-       
         switch (choice) {
             case 1:
                 printf("Enter the value to push: ");
                 scanf("%d", &value);
-                push(&stack, value);
+                push(value);
                 break;
             case 2:
-                value = pop(&stack);
-                if (value != -1) {
+                if(noNodes==0)
+                printf("Stack is empty. Nothing to pop.\n");
+                else
+                {
+                    value = pop(head);
                     printf("Popped value: %d\n", value);
                 }
                 break;
             case 3:
-                value = peek(stack);
-                if (value != -1) {
-                    printf("Top element: %d\n", value);
-                }
+                if(noNodes==0)
+                printf("Stack is empty. Nothing to peek.\n");
+                else
+                printf("Top element: %d\n", head->data);
                 break;
             case 4:
-                display(stack);
+                if(noNodes==0)
+                printf("Stack empty");
+                else
+                display(head);
                 break;
             case 5:
-                if (isEmpty(stack)) {
+                if (noNodes==0) {
                     printf("Stack is empty.\n");
                 } else {
                     printf("Stack is not empty.\n");
                 }
                 break;
             case 6:
-                printf("Exiting...\n");
+                return 0;
                 break;
             default:
                 printf("Invalid choice. Please enter a number between 1 and 6.\n");
                 break;
         }
-    } while (choice != 6);
+    } while (true);
    
     // Free remaining nodes in the stack
-    while (stack != NULL) {
-        Node* temp = stack;
-        stack = stack->next;
+    while (head != NULL) {
+        Node* temp = head;
+        head=head->next;
+        temp->next=NULL;
         free(temp);
     }
-}
-
-int main() {
-    menu();
     return 0;
 }
