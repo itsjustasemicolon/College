@@ -45,8 +45,8 @@ int pop(Stack* stack) {
 // Function to evaluate a postfix expression
 int evaluatePostfix(const char* postfix) {
     Stack* stack = createStack(100); // Create a stack with capacity 100
-
-    for (int i = 0; postfix[i]; i++) {
+	int i=0;
+    for ( i = 0; postfix[i]; i++) {
         char ch = postfix[i];
 
         if (isspace(ch)) {
