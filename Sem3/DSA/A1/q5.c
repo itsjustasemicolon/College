@@ -1,7 +1,7 @@
 #include<stdio.h>
 
 int main(){
-    int deg1,deg2;
+    int deg1,deg2,c=0;
     printf("Enter the degree of the first and second polynomials respectively: ");
     scanf("%d",&deg1);
     scanf("%d",&deg2);
@@ -37,13 +37,15 @@ int main(){
         if(polres[i]==0){
         continue;
         }
+		c++;
+		if(c>1)
+		printf(" + ");
         if(i==0){
-        printf("%d",polres[i]);
-        continue;
+            printf("%d",polres[i]);
+            continue;
         }
-        printf("%d x^%d + ",polres[i],i);
+        printf("%d x^%d",polres[i],i);
     }
     
     return 0;
 }
-
