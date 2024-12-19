@@ -77,7 +77,7 @@ int main() {
     Element* result = addSparseMatrices(mat1, s1, mat2, s2, &resultSize);
 
     
-    for (int i = 0; i < resultSize; i++) {
+    for ( i = 0; i < resultSize; i++) {
         printf("(%d, %d, %d) ", result[i].row, result[i].col, result[i].val);
     }
     printf("\n");
