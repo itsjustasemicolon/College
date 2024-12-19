@@ -67,8 +67,8 @@ int precedence(char op) {
 void infixToPostfix(const char* infix, char* postfix) {
     Stack* stack = createStack(100); // Create a stack with capacity 100
     int k = 0; // Index for postfix expression
-
-    for (int i = 0; infix[i]; i++) {
+	int i=0;
+    for (i = 0; infix[i]; i++) {
         char ch = infix[i];
 
         if (isspace(ch)) {
