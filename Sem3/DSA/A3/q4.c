@@ -1,7 +1,7 @@
 #include <stdio.h>
-
 void display(int arr[], int n) {
-    for (int i = 0; i < n; i++) {
+	int i=0,j=0;
+    for (i = 0; i < n; i++) {
         printf("%d ", arr[i]);
     }
     printf("\n");
@@ -56,7 +56,8 @@ void quickSort(int arr[], int low, int high, int n) {
     if (low < high) {
         int pivot = arr[high];
         int i = (low - 1);
-        for (int j = low; j <= high - 1; j++) {
+		int j;
+        for ( j = low; j <= high - 1; j++) {
             if (arr[j] < pivot) {
                 i++;
                 int temp = arr[i];
@@ -149,10 +150,11 @@ void heapify(int arr[], int n, int i) {
 }
 
 void heapSort(int arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--)
+	int i;
+    for ( i = n / 2 - 1; i >= 0; i--)
         heapify(arr, n, i);
 
-    for (int i = n - 1; i > 0; i--) {
+    for ( i = n - 1; i > 0; i--) {
         int temp = arr[0];
         arr[0] = arr[i];
         arr[i] = temp;
