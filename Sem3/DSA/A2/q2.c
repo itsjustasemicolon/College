@@ -12,7 +12,8 @@ int josephus(Node* prev, int k,int n) {
     // Eliminate nodes until one node is left
     while (n>1) 
     {
-        for (int i = 1; i < k; i++) 
+        int i=1;
+        for ( i = 1; i < k; i++) 
         {
             prev = current;
             current = current->next;
@@ -57,7 +58,8 @@ int main() {
     head->data=1;
     head->next=NULL;
     Node *ptr=head;
-    for(int i=2;i<=n;i++)
+    int i=2;
+    for(i=2;i<=n;i++)
     {
         Node* n = (Node*) malloc(sizeof(Node));
         n->data=i;
