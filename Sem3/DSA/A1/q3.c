@@ -6,7 +6,7 @@ int main(){
     scanf("%d",&deg1);
     scanf("%d",&deg2);
     int i;
-
+	int c=0;
     printf("Enter the polynomial 1: \n");
     int pol1[deg1+1];
     for(i=deg1;i>=0;i--){
@@ -31,11 +31,13 @@ int main(){
             if(pol2[i]==0){
             continue;
             }
-            if(i==0){
-            printf("%d",pol2[i]);
-            continue;
-            }
-            printf("%d x^%d + ",pol2[i],i);
+			c++;
+            if(c>1)
+			printf(" + ");
+			if(i!=0)
+            printf("%dx^%d ",pol2[i],i);
+			else
+			printf("%d ",pol2[i],i);
         }
     }
     else
@@ -49,13 +51,14 @@ int main(){
             if(pol1[i]==0){
             continue;
             }
-            if(i==0){
-            printf("%d",pol1[i]);
-            continue;
-            }
-            printf("%d x^%d + ",pol1[i],i);
+            c++;
+            if(c>1)
+			printf(" + ");
+			if(i!=0)
+            printf("%dx^%d ",pol1[i],i);
+			else
+			printf("%d ",pol1[i],i);
         }
     }
     return 0;
 }
-
