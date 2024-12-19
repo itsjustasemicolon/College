@@ -49,13 +49,32 @@ Element* addSparseMatrices(Element* mat1, int size1, Element* mat2, int size2, i
 
 int main() {
     
-    Element mat1[] = {{0, 0, 1}, {1, 1, 2}, {2, 2, 3}};
-    Element mat2[] = {{0, 1, 4}, {1, 0, 5}, {2, 2, 6}};
-    int size1 = sizeof(mat1) / sizeof(mat1[0]);
-    int size2 = sizeof(mat2) / sizeof(mat2[0]);
-
+	printf("Enter no of elements of matrix 1 and 2: ");
+	int s1,s2;
+	scanf("%d %d",&s1,&s2);
+    Element mat1[s1];
+    Element mat2[s2];
+	int i=0;
+	printf("Enter rol,col,val of Matrix1\n");
+    for(i=0;i<s1;i++)
+	{
+		int r,c,v;
+		scanf("%d %d %d",&r,&c,&v);
+		mat1[i].row=r;
+		mat1[i].col=c;
+		mat1[i].val=v;
+	}
+	printf("Enter rol,col,val of Matrix2\n");
+    for(i=0;i<s2;i++)
+	{
+		int r,c,v;
+		scanf("%d %d %d",&r,&c,&v);
+		mat2[i].row=r;
+		mat2[i].col=c;
+		mat2[i].val=v;
+	}
     int resultSize;
-    Element* result = addSparseMatrices(mat1, size1, mat2, size2, &resultSize);
+    Element* result = addSparseMatrices(mat1, s1, mat2, s2, &resultSize);
 
     
     for (int i = 0; i < resultSize; i++) {
