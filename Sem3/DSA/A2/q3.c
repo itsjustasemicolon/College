@@ -1,180 +1,216 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
-typedef struct node
+
+struct Node
 {
-    int n;
-    struct node* next;
-    struct node* prev;
-}node;
-node* head=NULL;
-void view(node*);
-void view(node* ptr)
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *createNode(int data)
 {
-    printf("head->%d->",ptr->n);
-    ptr=ptr->next;
-    while(ptr!=NULL)
-    {
-        printf("<-%i->",ptr->n);
-        ptr=ptr->next;
-    }
-    printf("NULL");
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
 }
+
+void insertNode(struct Node **head, int data, int position)
+{
+    int i;
+    struct Node *newNode = createNode(data);
+    if (position == 1)
+    {
+        newNode->next = *head;
+        if (*head != NULL)
+        {
+            (*head)->prev = newNode;
+        }
+        *head = newNode;
+        return;
+    }
+    struct Node *temp = *head;
+    for (i = 1; temp != NULL && i < position - 1; i++)
+    {
+        temp = temp->next;
+    }
+    if (temp == NULL)
+    {
+        printf("Position out of bounds\n");
+        free(newNode);
+        return;
+    }
+    newNode->next = temp->next;
+    if (temp->next != NULL)
+    {
+        temp->next->prev = newNode;
+    }
+    temp->next = newNode;
+    newNode->prev = temp;
+}
+
+void deleteNode(struct Node **head, int position)
+{
+int i;
+if (*head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    struct Node *temp = *head;
+    if (position == 1)
+    {
+        *head = temp->next;
+        if (*head != NULL)
+        {
+            (*head)->prev = NULL;
+        }
+        free(temp);
+        return;
+    }
+    for (i = 1; temp != NULL && i < position - 1; i++)
+    {
+        temp = temp->next;
+    }
+    if (temp == NULL || temp->next == NULL)
+    {
+        printf("Position out of bounds\n");
+        return;
+    }
+    struct Node *toDelete = temp->next;
+    temp->next = toDelete->next;
+    if (toDelete->next != NULL)
+    {
+        toDelete->next->prev = temp;
+    }
+    free(toDelete);
+}
+
+int countNodes(struct Node *head)
+{
+    int count = 0;
+    struct Node *temp = head;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+void reversePrint(struct Node *head)
+{
+    struct Node *temp = head;
+    if (temp == NULL)
+    {
+        return;
+    }
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->prev;
+    }
+    printf("\n");
+}
+
+void reverseList(struct Node **head)
+{
+    struct Node *temp = NULL;
+    struct Node *current = *head;
+    while (current != NULL)
+    {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+    if (temp != NULL)
+    {
+        *head = temp->prev;
+    }
+}
+
+void printList(struct Node *head)
+{
+    struct Node *temp = head;
+    while (temp != NULL)
+    {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
 int main()
 {
-    int noNodes=0;
-    while(true)
+    struct Node *head = NULL;
+    int choice, data, position;
+
+    while (1)
     {
-        printf("\na. Insert a node at a specified position \nb. View List \nc. Delete a node from a specified position. \nd. Count the number of nodes in the linked list. \ne. Reverse the linked list. \nf. Exit \nEnter choice: ");
-        char ch;
-        scanf(" %c",&ch);
-        switch(ch)
+        printf("\nMenu:\n");
+        printf("1. Insert a node\n");
+        printf("2. Delete a node\n");
+        printf("3. Count the nodes\n");
+        printf("4. Reverse print the list\n");
+        printf("5. Reverse the list\n");
+        printf("6. Print the list\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
         {
-            case 'a':
-            if(noNodes==0)
-            {
-                head=(node*)malloc(sizeof(node));
-                printf("n: ");
-                int no;
-                scanf("%i",&no);
-                head->n=no;
-                head->next=NULL;
-                head->prev=NULL;
-                noNodes++;
-            }
-            else
-            {
-                printf("Enter position: ");
-                int pos;
-                scanf("%i",&pos);
-                if(pos>0 && pos<=noNodes+1)
-                {
-                    node* ptr=(node*)malloc(sizeof(node));
-                    printf("n: ");
-                    int no;
-                    scanf("%i",&no);
-                    ptr->n=no;
-                    ptr->next=NULL;
-                    ptr->prev=NULL;
-                    if(pos==1)
-                    {
-                        ptr->next=head;
-                        head->prev=ptr;
-                        head=ptr;
-                    }
-                    else
-                    {
-                        int c=1;
-                        node* p=head;
-                        while(p!=NULL && c<pos-1)
-                        {
-                            p=p->next;
-                            c++;
-                        }
-                        ptr->next=p->next;
-                        if((ptr->next)!=NULL)
-                        (ptr->next)->prev=ptr;
-                        p->next=ptr;
-                        ptr->prev=p;
-                    }
-                    noNodes++;
-                }
-                
-                else{
-                    printf("Invalid position !");
-                }
-
-            }
+        case 1:
+            printf("Enter the data to insert: ");
+            scanf("%d", &data);
+            printf("Enter the position to insert: ");
+            scanf("%d", &position);
+            insertNode(&head, data, position);
+            printList(head);
             break;
 
-            case 'b':
-            if(noNodes>0)
-            view(head);
-            else
-            printf("Emtpy list ! Invalid request");
+        case 2:
+            printf("Enter the position to delete: ");
+            scanf("%d", &position);
+            deleteNode(&head, position);
+            printList(head);
             break;
 
-            case 'c':
-            if(noNodes>0)
-            {
-                printf("Enter position: ");
-                int pos;
-                scanf("%i",&pos);
-                if(pos==1)
-                {
-                    node* p=head;
-                    head=p->next;
-                    p->next=NULL;
-                    head->prev=NULL;
-                    free(p);
-                    noNodes--;
-                }
-                else if(pos>1 && pos<=noNodes)
-                {
-                    int c=1;
-                    node* p=head;
-                    while(p!=NULL && c<pos-1)
-                    {
-                        p=p->next;
-                        c++;
-                    }
-                    node* pre=p;
-                    p=p->next;
-                    pre->next=p->next;
-                    if((p->next)!=NULL)
-                    (p->next)->prev=pre;
-                    p->next=NULL;
-                    p->prev=NULL;
-                    free(p);
-                    noNodes--;
-                }
-                else
-                printf("Invalid position");
-            }
-            else
-            printf("Emtpy list ! Invalid request");
+        case 3:
+            printf("Number of nodes in the list: %d\n", countNodes(head));
             break;
 
-            case 'd':
-            printf("Nodes in linked list: %i",noNodes);
+        case 4:
+            printf("Reverse print of the list: ");
+            reversePrint(head);
             break;
 
-            case 'e':
-            if(noNodes==0)
-            printf("Emtpy list ! Invalid request");
-            else if(noNodes==1)
-            break;
-            else
-            {
-                node* pre;
-                node* curr;
-                node* nxt;
-                pre=head;
-                curr=head->next;
-                nxt=curr->next;
-                pre->next=NULL;
-                while(nxt!=NULL)
-                {
-                    curr->next=pre;
-                    curr->prev=NULL;
-                    nxt->prev=NULL;
-                    pre->prev=curr;
-                    pre=curr;
-                    curr=nxt;
-                    nxt=nxt->next;
-                }
-                curr->next=pre;
-                pre->prev=curr;
-                pre=curr;
-                head=pre;
-
-            }
+        case 5:
+            reverseList(&head);
+            printf("List reversed.\n");
+            printList(head);
             break;
 
-            case 'f':
-            return 0;
+        case 6:
+            printf("Current Linked List: ");
+            printList(head);
+            break;
+
+        case 7:
+            printf("Exiting...\n");
+            exit(0);
+
+        default:
+            printf("Invalid choice. Please try again.\n");
         }
-
     }
+
     return 0;
 }
