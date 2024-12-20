@@ -77,11 +77,12 @@ int dequeue(Queue *queue) {
 }
 
 void displayQueue(Queue *queue) {
+	int i;
     printf("Queue contents: ");
-    for (int i = queue->stack2->top; i >= 0; i--) {
+    for (i = queue->stack2->top; i >= 0; i--) {
         printf("%d ", queue->stack2->arr[i]);
     }
-    for (int i = 0; i <= queue->stack1->top; i++) {
+    for (i = 0; i <= queue->stack1->top; i++) {
         printf("%d ", queue->stack1->arr[i]);
     }
     printf("\n");
