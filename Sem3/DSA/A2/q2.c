@@ -1,79 +1,76 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define the structure for a circular linked list node
-typedef struct Node {
+struct Node
+{
     int data;
-    struct Node* next;
-} Node;
-// Function to solve the Josephus problem
-int josephus(Node* prev, int k,int n) {
-    Node* current=prev->next;//head
-    // Eliminate nodes until one node is left
-    while (n>1) 
+    struct Node *next;
+};
+
+struct Node *createNode(int data)
+{
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Node *createCircularLinkedList(int n)
+{
+    struct Node *head = NULL, *temp = NULL, *newNode = NULL;
+    int i;
+    for (i = 1; i <= n; i++)
     {
-        int i=1;
-        for ( i = 1; i < k; i++) 
+        newNode = createNode(i);
+        if (head == NULL)
         {
-            prev = current;
-            current = current->next;
+            head = newNode;
+            temp = head;
+        }
+        else
+        {
+            temp->next = newNode;
+            temp = temp->next;
+        }
+    }
+    temp->next = head;
+    return head;
+}
+
+int josephus(struct Node *head, int k)
+{
+    struct Node *temp = head;
+    struct Node *prev = NULL;
+        int count;
+    while (temp->next != temp)
+    {
+
+        for (count = 1; count < k; count++)
+        {
+            prev = temp;
+            temp = temp->next;
         }
 
-        // Remove the k-th node
-        prev->next = current->next;
-        free(current);
-        // Move to the next node
-        current = prev->next;
-        n--;
+        printf("Person at position %d is eliminated.\n", temp->data);
+        prev->next = temp->next;
+        free(temp);
+        temp = prev->next;
     }
 
-    int lastPerson = current->data;
-    free(current); // Free the last remaining node
-    return lastPerson;
+    return temp->data;
 }
 
-// Function to print the circular linked list
-void printCircularList(Node* head) {
-    if (head == NULL) return;
-
-    Node* temp = head;
-    do {
-        printf("%d -> ", temp->data);
-        temp = temp->next;
-    } while (temp != head);
-    printf("(head)\n");
-}
-
-// Main function to test the Josephus problem
-int main() {
+int main()
+{
     int n, k;
-
-    printf("Enter the number of people (n): ");
+    printf("Enter the number of people: ");
     scanf("%d", &n);
     printf("Enter the step count (k): ");
     scanf("%d", &k);
-    if(n<=0)
-    return 0;
-    Node* head = (Node*) malloc(sizeof(Node));
-    head->data=1;
-    head->next=NULL;
-    Node *ptr=head;
-    int i=2;
-    for(i=2;i<=n;i++)
-    {
-        Node* n = (Node*) malloc(sizeof(Node));
-        n->data=i;
-        n->next=NULL;
-        ptr->next=n;
-        ptr=n;
-    }
-    ptr->next=head;// Make it circular
-    printf("Circular linked list before elimination: ");
-    printCircularList(head);
 
-    int lastPerson = josephus(ptr, k,n);
+    struct Node *head = createCircularLinkedList(n);
+    int lastPerson = josephus(head, k);
 
-    printf("The last remaining person is: %d\n", lastPerson);
-
+    printf("The last person remaining is at position %d\n", lastPerson);
     return 0;
 }
