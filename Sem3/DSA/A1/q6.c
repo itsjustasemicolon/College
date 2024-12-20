@@ -1,6 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+void strrev(char* str)
+{
+    if (!str) {
+        return;
+    }
+    int i = 0;
+    int j = strlen(str) - 1;
+
+    while (i < j) {
+        char c = str[i];
+        str[i] = str[j];
+        str[j] = c;
+        i++;
+        j--;
+    }
+}
+
 void add(char num1[], char num2[], char ans[]) {
     int len1 = strlen(num1);
     int len2 = strlen(num2);
@@ -18,7 +36,7 @@ void add(char num1[], char num2[], char ans[]) {
 }
 int main() {
     char num1[1000], num2[1000], ans[1001];
-    printf("Enter the first number = ");
+    printf("Enter the first very long number = ");
     scanf("%s", num1);
     printf("Enter the second very long number = ");
     scanf("%s", num2);
