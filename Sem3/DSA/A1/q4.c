@@ -3,7 +3,7 @@
 
 int main(){
     int deg;
-	int c=0;
+        int c=0;
     printf("Enter the degree of the  polynomial: ");
     scanf("%d",&deg);
     int i;
@@ -20,9 +20,9 @@ int main(){
         if(pol[i]==0){
             continue;
         }
-		c++;
-		if(c>1)
-		printf(" + ");
+                c++;
+                if(c>1)
+                printf(" + ");
         if(i==0){
             printf("%d",pol[i]);
             continue;
@@ -34,7 +34,7 @@ int main(){
     int x;
     scanf("%d",&x);
 
-    long long int ans=0, int i;
+    long long int ans=0;
     for(i=0;i<=deg;i++){
         ans+=pol[i]*pow(x,i);
     }
